@@ -1,3 +1,6 @@
+
+# DONT FORGET
+you gotta be using node >= 14 in the same terminal where you npm install and npm start
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
