@@ -1,15 +1,13 @@
 // import styled from 'styled-components';
-import React from 'react'
+import React from 'react';
 
+const LogBar = ({ x, y }) => {
+	return (
+		<>
+			<p>X Location: {x}</p>
+			<p>Y Location: {y}</p>
+		</>
+	);
+};
 
-const LogBar = ( {x, y} ) => {
-
-  return (
-    <>
-    <p>X Location: {x}</p>
-    <p>Y Location: {y}</p>
-    </>
-  )
-}
-
-export default LogBar
+export default LogBar;
