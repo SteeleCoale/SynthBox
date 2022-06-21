@@ -26,7 +26,12 @@ const Box = (props) => {
 	const [freq, SetFreq] = useState('')
 	const [wave, setWave] = useState('')
 
-	const [oscillator, setOscillator] = useState(null)
+	const [ audioContext, setAudioContext ] = useState(null)
+
+	useEffect(() => {
+		const audioContext = new (window.AudioContext || window.webkitAudioContext)
+		setAudioContext(audioContext)
+	}, [])
 
 	useEffect(() => {
 		const newDots = dots;
@@ -59,27 +64,31 @@ const Box = (props) => {
 	//create mouseDownEvent handler that starts the audio
 	//mouseUp handler that stops the audio.
 
-		const audioContext = new (window.AudioContext || window.webkitAudioContext)
+
+
+		// let mainGainNode = audioContext.createGain()
+		// mainGainNode.gain.value = 0.1;
+		
+		// let osc = audioContext.createOscillator()
+		// osc.type = 'square'
+		// // osc.frequency.value = freq
+		
+		// osc.connect(mainGainNode)
+		// mainGainNode.connect(audioContext.destination)
 
 		let mainGainNode = audioContext.createGain()
 		mainGainNode.gain.value = 0.1;
 		
 		let osc = audioContext.createOscillator()
 		osc.type = 'square'
-		// osc.frequency.value = freq
+		osc.frequency.value = freq
 		
 		osc.connect(mainGainNode)
 		mainGainNode.connect(audioContext.destination)
 
-	const onMouseDown = (osc) => {
-		setEngaged(true)
-		console.log(osc)
-		osc.frequency.value = freq
-		audioContext.resume()
+	const onMouseDown = () => {
+		
 		osc.start()
-		setTimeout(() => {
-			osc.stop()
-		}, 1000)
 	}
 
 	const onMouseUp = (osc) => {
@@ -88,15 +97,15 @@ const Box = (props) => {
 
 	const onMouseMove = (e, osc) => {
 		boxClick(e)
-		osc.frequency.value = freq
+
 	}
 
 	return (
 		<BoxWrapper>
 			<StyledBox
-				onMouseDown={() => onMouseDown(osc)}
-				onMouseUp={() => onMouseUp(osc)}
-				onMouseMove={(e) => onMouseMove(e, osc)}
+				onMouseDown={() => onMouseDown()}
+				onMouseUp={() => onMouseUp()}
+				onMouseMove={(e) => onMouseMove(e)}
 				// onTouchMove={(e) => boxClick(e)}
 				// onTouchStart={(e) => boxClick(e)}
 				// onPointerMove={(e) => boxClick(e)}
