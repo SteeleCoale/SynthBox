@@ -26,12 +26,7 @@ const Box = (props) => {
 	const [freq, SetFreq] = useState('')
 	const [wave, setWave] = useState('')
 
-	const [ audioContext, setAudioContext ] = useState(null)
 
-	useEffect(() => {
-		const audioContext = new (window.AudioContext || window.webkitAudioContext)
-		setAudioContext(audioContext)
-	}, [])
 
 	useEffect(() => {
 		const newDots = dots;
@@ -60,44 +55,41 @@ const Box = (props) => {
 		}
 		else return
 	};
-	//I think what to do is: create a separate function that is the audio context stuff
-	//create mouseDownEvent handler that starts the audio
-	//mouseUp handler that stops the audio.
+	//I think what to do is: 
+	// Stop the sound on mouse up
+	// Fix the incorrect mouse position
+	// tighten the range
+	// are the audio nodes actually connected?
 
 
 
-		// let mainGainNode = audioContext.createGain()
-		// mainGainNode.gain.value = 0.1;
-		
-		// let osc = audioContext.createOscillator()
-		// osc.type = 'square'
-		// // osc.frequency.value = freq
-		
-		// osc.connect(mainGainNode)
-		// mainGainNode.connect(audioContext.destination)
+
+	const [ audioContext, setAudioContext ] = useState(new (window.AudioContext || window.webkitAudioContext))
+	const [ osc, setOsc ] = useState(audioContext.createOscillator())
+	const [ waveType, setWaveType ] = useState('sawtooth')
+
 
 		let mainGainNode = audioContext.createGain()
-		mainGainNode.gain.value = 0.1;
+		mainGainNode.gain.value = 0;
 		
-		let osc = audioContext.createOscillator()
-		osc.type = 'square'
+		osc.type = waveType
 		osc.frequency.value = freq
+		osc.start(audioContext.currentTime)
 		
 		osc.connect(mainGainNode)
 		mainGainNode.connect(audioContext.destination)
 
 	const onMouseDown = () => {
-		
-		osc.start()
+		setEngaged(true)
 	}
 
 	const onMouseUp = (osc) => {
 		setEngaged(false)
+		mainGainNode.gain.value = 0;
 	}
 
 	const onMouseMove = (e, osc) => {
 		boxClick(e)
-
 	}
 
 	return (
