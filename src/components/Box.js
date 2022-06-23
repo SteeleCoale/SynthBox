@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import Audio from '../utils/audio';
+import { makeDistortionCurve } from '../utils/makeDistortionCurve';
+
 import LogBar from './LogBar';
 import NoteFreqBar from './NoteFreqBar';
 import Dot from './Dot';
@@ -52,29 +54,72 @@ const Box = (props) => {
 			setY(y);
 		} else return;
 	};
-	//I think what to do is:
-	// Stop the sound on mouse up
-	// Fix the incorrect mouse position
-	// tighten the range
-	// are the audio nodes actually connected?
 
 	// Relates to what you hear
 	const [freq, SetFreq] = useState('');
 	const [wave, setWave] = useState('');
 
-	// set state to represent initial value of masterGainNode
 	const [masterGainValue, setMasterGainValue] = useState(0);
+	const [oscillatorNode, setOscillatorNode] = useState();
+	const [waveShaperNode, setWaveShaperNode] = useState();
+	const [convolverNode, setConvolverNode] = useState();
+
+	const initialize = () => {
+		// Connect the masterGainNode to the audio context to allow it to output sound.
+		Audio.masterGainNode.connect(Audio.context.destination);
+		// Set masterGain Value to 0
+		Audio.masterGainNode.gain.setValueAtTime(0, Audio.context.currentTime);
+
+		const mainOscillatorNode = Audio.context.createOscillator();
+		const distortion = Audio.context.createWaveShaper();
+		// const reverb = Audio.context.createConvolver()
+
+		mainOscillatorNode.connect(distortion);
+		// reverb.connect(distortion);
+		distortion.connect(Audio.masterGainNode);
+
+		setOscillatorNode(mainOscillatorNode);
+		setWaveShaperNode(distortion);
+		// setConvolverNode(reverb);
+	};
+	// initialize Audio connect to destination, main gain connect to destinationo/output, create oscillator and put in state on first render
+	//remember oscillators are cheap, and once stoped they cannot be restart.
+	useEffect(initialize, []);
+
+	const changeMasterVolume = (e) => {
+		setMasterGainValue(e.target.value / 100);
+	};
+
+	const onMouseEnter = () => {
+		oscillatorNode.start();
+	};
 
 	const onMouseDown = () => {
+		//for visuals
 		setEngaged(true);
+		//for audio
+		Audio.masterGainNode.gain.setValueAtTime(
+			masterGainValue,
+			Audio.context.currentTime
+		);
 	};
 
-	const onMouseUp = (osc) => {
+	const onMouseUp = () => {
+		//for visuals
 		setEngaged(false);
+		//for audio
+		Audio.masterGainNode.gain.setValueAtTime(0, Audio.context.currentTime);
 	};
 
-	const onMouseMove = (e, osc) => {
+	const onMouseMove = (e) => {
+		//sets xy vals into state.
 		boxClick(e);
+		//change pitch freq
+		oscillatorNode.frequency.value = freq;
+		//change distortion val
+		waveShaperNode.curve = makeDistortionCurve(x);
+		//change reverb
+		// console.log('convolver node', convolverNode);
 	};
 
 	return (
@@ -84,6 +129,7 @@ const Box = (props) => {
 				onMouseDown={() => onMouseDown()}
 				onMouseUp={() => onMouseUp()}
 				onMouseMove={(e) => onMouseMove(e)}
+				onMouseEnter={onMouseEnter}
 				// onTouchMove={(e) => boxClick(e)}
 				// onTouchStart={(e) => boxClick(e)}
 				// onPointerMove={(e) => boxClick(e)}
@@ -91,11 +137,20 @@ const Box = (props) => {
 				// onPointerStart={(e) => boxClick(e)}
 			>
 				{dots.map((dot, index) => (
-					<Dot x={dot.x} y={dot.y} key={index}/>
+					<Dot x={dot.x} y={dot.y} key={index} />
 				))}
 			</StyledBox>
 			<LogBar x={x} y={y} />
 			<NoteFreqBar freq={freq} wave={wave} />
+			<p>Master Volume: </p>
+			<input
+				type="range"
+				min="0"
+				max="100"
+				value={masterGainValue * 100}
+				onChange={changeMasterVolume}
+				className="pad-volume"
+			/>
 		</BoxWrapper>
 	);
 };

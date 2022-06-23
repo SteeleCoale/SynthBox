@@ -27,11 +27,10 @@ const StyledDot = styled('div')`
 	animation-name: ${bloomAnimation};
 	animation-duration: 3s;
 	animation-iteration-count: infinite;
-
 `;
 
 const Dot = ({ x, y }) => {
-	const dotRef = useRef()
+	const dotRef = useRef();
 	return <StyledDot ref={dotRef} x={x} y={y} />;
 };
 
