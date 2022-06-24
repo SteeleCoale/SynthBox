@@ -8,6 +8,7 @@ const StyledApp = styled('div')`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background-color: #03a9f4;
 `;
 
 function App() {

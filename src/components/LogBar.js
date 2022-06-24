@@ -1,11 +1,17 @@
-// import styled from 'styled-components';
+import styled from 'styled-components';
 import React from 'react';
+
+const StyledP = styled('p')`
+	color: white;
+	font-size: 20px;
+	font-weight: 600;
+`
 
 const LogBar = ({ x, y }) => {
 	return (
 		<>
-			<p>X Location: {x}</p>
-			<p>Y Location: {y}</p>
+			<StyledP>X Location: {x}</StyledP>
+			<StyledP>Y Location: {y}</StyledP>
 		</>
 	);
 };
