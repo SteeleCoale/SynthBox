@@ -8,7 +8,12 @@ const StyledApp = styled('div')`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: #03a9f4;
+	background: rgb(34, 193, 195);
+	background: linear-gradient(
+		60deg,
+		rgba(34, 193, 195, 1) 0%,
+		rgba(155, 45, 253, 1) 100%
+	);
 `;
 
 function App() {

@@ -1,7 +1,6 @@
 // DIFFERENT WAYS TO MAKE THE DISTORTION CURVE
 
-
-const DEG = Math.PI / 180;
+// const DEG = Math.PI / 180;
 
 //creates a Float32 array to use in the WaveShaperNode
 

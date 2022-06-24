@@ -5,7 +5,7 @@ const StyledP = styled('p')`
 	color: white;
 	font-size: 20px;
 	font-weight: 600;
-`
+`;
 
 const NoteFreqBar = ({ freq, wave }) => {
 	return (

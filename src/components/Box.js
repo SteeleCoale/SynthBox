@@ -22,7 +22,7 @@ const StyledBox = styled('div')`
 
 const Box = (props) => {
 	//STATE AND FUNCTIONS FOR WHAT YOU SEE
-	
+
 	//cursor location in Box
 	const [x, setX] = useState('');
 	const [y, setY] = useState('');
