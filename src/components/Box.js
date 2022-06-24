@@ -57,18 +57,17 @@ const Box = (props) => {
 
 	// Relates to what you hear
 	const [freq, SetFreq] = useState('');
-	const [wave, setWave] = useState('');
 
-	const [masterGainValue, setMasterGainValue] = useState(0);
+	const [masterGainValue, setMasterGainValue] = useState(0.5);
 	const [oscillatorNode, setOscillatorNode] = useState();
 	const [waveShaperNode, setWaveShaperNode] = useState();
-	const [convolverNode, setConvolverNode] = useState();
+	// const [convolverNode, setConvolverNode] = useState();
 
 	const initialize = () => {
 		// Connect the masterGainNode to the audio context to allow it to output sound.
 		Audio.masterGainNode.connect(Audio.context.destination);
 		// Set masterGain Value to 0
-		Audio.masterGainNode.gain.setValueAtTime(0, Audio.context.currentTime);
+		Audio.masterGainNode.gain.setValueAtTime(0.5, Audio.context.currentTime);
 
 		const mainOscillatorNode = Audio.context.createOscillator();
 		const distortion = Audio.context.createWaveShaper();
@@ -141,7 +140,7 @@ const Box = (props) => {
 				))}
 			</StyledBox>
 			<LogBar x={x} y={y} />
-			<NoteFreqBar freq={freq} wave={wave} />
+			<NoteFreqBar freq={freq} wave={x} />
 			<p>Master Volume: </p>
 			<input
 				type="range"

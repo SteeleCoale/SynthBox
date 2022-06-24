@@ -5,7 +5,7 @@ const NoteFreqBar = ({ freq, wave }) => {
 	return (
 		<>
 			<p>Note Frequency: {freq}</p>
-			<p>Wave Shape: {wave}</p>
+			<p>Distortion Factor: {wave}</p>
 		</>
 	);
 };
