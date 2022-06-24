@@ -21,10 +21,14 @@ const StyledBox = styled('div')`
 `;
 
 const Box = (props) => {
-	//relates to what you see
+	//STATE AND FUNCTIONS FOR WHAT YOU SEE
+	
+	//cursor location in Box
 	const [x, setX] = useState('');
 	const [y, setY] = useState('');
+	//dots (tail displayed)
 	const [dots, setDots] = useState([]);
+	//used to tell if user is pressing down on mouse when that's the case the tail dots get generated
 	const [engaged, setEngaged] = useState(false);
 
 	const boxRef = useRef();
@@ -36,8 +40,10 @@ const Box = (props) => {
 		setDots(newDots);
 	}, [x, y]);
 
+	//When engaged and cursor location changes this func translates xy offsets from top left to frequencies within a range
+	//probably should extract this to util so range can easily be changed
 	useEffect(() => {
-		let percentage = y / 500;
+		let percentage = y / 500; //500 is current height of box
 		let flippedFreq = percentage * 4158.5 + 27.5;
 		//find midpoint of frequencies, subtract diffence
 		let midFreq = 2106.75; // 4158.5/2 + 27.5
@@ -46,6 +52,7 @@ const Box = (props) => {
 		SetFreq(resultFreq);
 	}, [x, y]);
 
+	//Sets XY mouse position in state related to where mouse is from top left of page, vs where the outside of the box is.
 	const boxClick = (e) => {
 		if (engaged) {
 			const x = e.clientX - boxRef.current.getBoundingClientRect().left;
@@ -55,7 +62,8 @@ const Box = (props) => {
 		} else return;
 	};
 
-	// Relates to what you hear
+	//STATE AND FUNCTIONS FOR WHAT YOU HEAR
+
 	const [freq, SetFreq] = useState('');
 
 	const [masterGainValue, setMasterGainValue] = useState(0.5);
@@ -89,6 +97,7 @@ const Box = (props) => {
 		setMasterGainValue(e.target.value / 100);
 	};
 
+	//needed some some user interaction starts the sound. oscillator cannot be started on load.
 	const onMouseEnter = () => {
 		oscillatorNode.start();
 	};
